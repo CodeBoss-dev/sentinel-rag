@@ -1,0 +1,22 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Generated vector stores (rebuilt automatically)
+chroma_db/
+Project_Code/evaluation/databases/
+
+# Duplicate archive of the exported model artifacts
+*.zip
+
+# Documents and machine-specific files (not code)
+*.pdf
+.claude/
+.DS_Store
+Project_Frontend/preview.jpg
+Project_Code/baseline_result.json
+
+# Unpublished paper draft (kept private)
+Research_Paper/

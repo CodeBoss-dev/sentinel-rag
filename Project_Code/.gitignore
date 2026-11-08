@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+chroma_db/
+*.pt
+*.zip
+baseline_result.json
