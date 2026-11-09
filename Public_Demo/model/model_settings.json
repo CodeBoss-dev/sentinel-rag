@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "tokenizer_name": "gpt2",
+  "vocab_size": 50258,
+  "pad_id": 50257,
+  "max_length": 96,
+  "hidden_features": 32,
+  "labels": [
+    "benign",
+    "instruction_manipulation",
+    "data_exfiltration",
+    "phishing",
+    "access_control"
+  ],
+  "risk_definition": "1 - P(benign)",
+  "remove_threshold": 0.8822243735194206,
+  "demote_threshold": 0.4411121867597103,
+  "automatic_filtering": true,
+  "selected_on": "validation",
+  "validation_benign_fpr": 0.05,
+  "validation_malicious_recall": 0.8925,
+  "validation_binary_f1": 0.937007874015748
+}

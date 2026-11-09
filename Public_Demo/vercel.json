@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "{templates,static,data,model,tiktoken_cache}/**",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index?__path=/$1"
+    }
+  ]
+}
