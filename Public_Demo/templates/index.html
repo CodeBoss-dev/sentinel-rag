@@ -19,6 +19,7 @@
     </div>
     <nav class="tabs" role="tablist">
         <button role="tab" aria-selected="true" data-tab="overview">Overview</button>
+        <button role="tab" aria-selected="false" data-tab="assistant">Assistant</button>
         <button role="tab" aria-selected="false" data-tab="industry">Who it's for</button>
         <button role="tab" aria-selected="false" data-tab="brain">The Brain</button>
         <button role="tab" aria-selected="false" data-tab="technical">Technical</button>
@@ -99,13 +100,69 @@
                 <span><i class="status-chip unsafe">✕</i>Tricked or leaked</span>
             </div>
         </div>
-        <p class="chart-sub">Each row is one question. Click a row to watch it below.</p>
+        <p class="chart-sub">Each row is one question. Click a row to see all three answers side by side.</p>
         <div id="question-grid" class="qgrid"></div>
     </div>
 
-    <!-- Live side-by-side -->
-    <div class="card" id="demo">
-        <h2>Watch it happen</h2>
+    <div class="card how">
+        <h2>The three assistants we compare</h2>
+        <div class="how-grid">
+            <div class="how-item"><div class="sys-badge s1">1</div><h3>No guard</h3><p>Reads everything it finds and trusts all of it. This is how most assistants work today.</p></div>
+            <div class="how-item"><div class="sys-badge s2">2</div><h3>Neural guard</h3><p>Our own small AI, built and trained from scratch, checks every piece in a few milliseconds.</p></div>
+            <div class="how-item"><div class="sys-badge s3">3</div><h3>AI judge</h3><p>A second, local AI reads every piece and gives a written verdict before anything is used.</p></div>
+        </div>
+        <p class="chart-sub">All three use the same files, the same search and the same answer-writing AI. Only the guard is different, so any difference in the results comes from the guard.</p>
+    </div>
+</section>
+
+<!-- ================================================================ ASSISTANT -->
+<section id="tab-assistant" class="tab-panel" role="tabpanel" hidden>
+    <div class="assist-mode">
+        <div class="segmented" id="assist-mode" role="radiogroup" aria-label="View">
+            <button role="radio" aria-checked="true" data-mode="chat">Assistant</button>
+            <button role="radio" aria-checked="false" data-mode="compare">Compare all three side by side</button>
+        </div>
+    </div>
+
+    <div class="card assist" id="assist-chat">
+        <div class="assist-top">
+            <div class="assist-title">
+                <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="currentColor"/><path d="m10.5 16 3.8 3.8 7.4-7.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div>
+                    <strong>Company Assistant</strong>
+                    <span>Answers from the company's own files</span>
+                </div>
+            </div>
+            <button class="ghost-btn" id="chat-clear" type="button">New chat</button>
+        </div>
+        <div class="assist-settings">
+            <div class="field">
+                <span>Signed in as</span>
+                <div class="segmented" id="assist-role" role="radiogroup" aria-label="Signed in as">
+                    <button role="radio" aria-checked="true" data-role="employee">Employee</button>
+                    <button role="radio" aria-checked="false" data-role="contractor">Contractor</button>
+                    <button role="radio" aria-checked="false" data-role="finance_administrator">Finance admin</button>
+                </div>
+            </div>
+            <div class="field">
+                <span>Protection</span>
+                <div class="segmented" id="assist-guard" role="radiogroup" aria-label="Protection">
+                    <button role="radio" aria-checked="false" data-guard="baseline">Off</button>
+                    <button role="radio" aria-checked="true" data-guard="neural">Neural guard</button>
+                    <button role="radio" aria-checked="false" data-guard="judge">AI judge</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat" id="chat" aria-live="polite"></div>
+        <form id="chat-form" class="chat-form">
+            <input id="chat-input" maxlength="500" autocomplete="off" placeholder="Ask a question about company policy…" aria-label="Your question">
+            <button type="submit" class="primary-btn" id="chat-send">Send</button>
+        </form>
+    </div>
+
+    <div class="card" id="demo" hidden>
+        <h2>Same question, three assistants</h2>
+        <p class="chart-sub">Saved test runs. Each column shows what that assistant read, what its guard blocked and the answer it gave.</p>
         <div class="demo-controls">
             <label class="field">
                 <span>Question</span>
@@ -121,7 +178,7 @@
             </div>
         </div>
         <details class="own-question">
-            <summary>Ask your own question (needs the local AI models, so it works only when the team runs the demo on their computer)</summary>
+            <summary>Ask all three your own question (needs the local AI models, so it works only when the team runs the demo on their computer)</summary>
             <form id="live-form">
                 <input id="live-query" maxlength="500" placeholder="e.g. How do I get a new laptop approved?">
                 <button type="submit" class="primary-btn" id="live-button">Ask all three</button>
@@ -132,16 +189,6 @@
             <span>❶ Question asked</span><i></i><span>❷ AI finds 5 related pieces in company files</span><i></i><span>❸ Guard checks each piece</span><i></i><span>❹ AI writes the answer</span>
         </div>
         <div class="compare" id="compare"></div>
-    </div>
-
-    <div class="card how">
-        <h2>The three assistants we compare</h2>
-        <div class="how-grid">
-            <div class="how-item"><div class="sys-badge s1">1</div><h3>No guard</h3><p>Reads everything it finds and trusts all of it. This is how most assistants work today.</p></div>
-            <div class="how-item"><div class="sys-badge s2">2</div><h3>Neural guard</h3><p>Our own small AI, built and trained from scratch, checks every piece in a few milliseconds.</p></div>
-            <div class="how-item"><div class="sys-badge s3">3</div><h3>AI judge</h3><p>A second, local AI reads every piece and gives a written verdict before anything is used.</p></div>
-        </div>
-        <p class="chart-sub">All three use the same files, the same search and the same answer-writing AI. Only the guard is different, so any difference in the results comes from the guard.</p>
     </div>
 </section>
 

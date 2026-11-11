@@ -31,9 +31,10 @@ on a 500-message held-out test set, 5 threat classes. All data is synthetic.
 
 ## Dashboard
 
-A Flask web app with four tabs:
+A Flask web app with five tabs:
 
-- **Overview**: animated explainer, headline numbers, comparison charts, and a side-by-side view of what each assistant found, blocked and answered.
+- **Overview**: animated explainer, headline numbers, comparison charts and a grid of every test question.
+- **Assistant**: the chat window an employee would use, with a protection switch (off, neural guard, AI judge) and a side-by-side view of all three assistants.
 - **Who it's for**: pick a bank, hospital, law firm or online store and see a real test run on that organisation's files.
 - **The Brain**: an animated diagram of the neural network reading any message you type.
 - **Technical**: every metric, saved answer, confusion matrix, judge prompt, scoring rule and limitation.

@@ -76,7 +76,7 @@ def explain():
 def ask():
     return jsonify(error="Asking a new question needs the two local AI models (Llama 3.2 and Gemma 2), which run "
                          "on the team's own computer. This public demo replays the saved test runs, so please pick "
-                         "one of the ready-made questions above."), 503
+                         "one of the ready-made questions."), 503
 
 
 @app.get("/api/suite")

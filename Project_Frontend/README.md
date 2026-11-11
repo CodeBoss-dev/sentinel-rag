@@ -13,14 +13,15 @@ cd Project_Frontend
 ```
 
 Open http://127.0.0.1:5001. Models needed for live questions: `llama3.2:3b`
-(answer writer) and `gemma2:2b` (judge). The Overview tab replays saved results,
-so the ready-made questions work instantly even without Ollama.
+(answer writer) and `gemma2:2b` (judge). Without Ollama, the suggested questions
+on the Assistant tab replay their saved answers instantly.
 
-## The four tabs
+## The five tabs
 
 | Tab | For | Shows |
 |---|---|---|
-| Overview | Anyone | Animated "idea in one picture", headline numbers, six comparison charts, a ✓/✕ grid of every test question, and a side-by-side view of what each assistant found, blocked and answered. Ask your own question live. |
+| Overview | Anyone | Animated "idea in one picture", headline numbers, six comparison charts and a ✓/✕ grid of every test question. |
+| Assistant | Anyone who wants to try the product | A chat window like the one an employee would use: pick who is signed in and which protection is on, ask a question, and switch protection off to see the difference. Runs live when Ollama is on; otherwise the suggested questions replay their saved answers. A second view compares all three assistants side by side. |
 | Who it's for | Business audiences | Pick a bank, hospital, law firm or online store: a four-panel story of a real test run on that organisation's files (question → planted fake order → fooled vs. protected answer), plain-language benefits, India breach-cost chart (IBM 2026), how the guard fits in, and a ✓/✕ grid across all 8 industry tests. |
 | The Brain | Anyone | Animated diagram of the neural network running on any message you type, the words it focused on, how its decision builds layer by layer, a report card and the learning curve. |
 | Technical | Examiners who want depth | Setup, full metric tables per scenario, every saved answer, confusion matrix, precision/recall/F1, risk-score histogram with thresholds, training curves, judge prompt/schema and agreement rates, scoring method, limitations, and the whole knowledge base. |
@@ -32,6 +33,8 @@ app.py          Flask routes (page + JSON API)
 sentinel.py     Shared RAG core and the three security variants
 evaluate.py     Runs the 25-question suite in two scenarios → data/suite_results.json
 industries.py   Runs 8 industry questions on industries/*/ → data/industry_results.json
+knowledge/      Extended company files (HR, IT, travel, security, office) searched only by live questions;
+                the saved test suite and all reported numbers use Project_Code/documents/ alone
 industries/     Synthetic files for a bank, hospital, law firm and online store
 inference.py    Neural classifier: classify, explain (attention + per-layer readout), test report
 neural_model.py Exported PyTorch architecture
