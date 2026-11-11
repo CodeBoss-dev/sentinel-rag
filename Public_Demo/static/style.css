@@ -191,6 +191,42 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 .sys-badge { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
 .sys-badge.s1 { background: var(--s1); } .sys-badge.s2 { background: var(--s2); } .sys-badge.s3 { background: var(--s3); }
 
+/* ---------- assistant ---------- */
+.assist-mode { display: flex; justify-content: center; }
+.assist { max-width: 860px; width: 100%; margin: 0 auto; padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+.assist-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.assist-title { display: flex; align-items: center; gap: 12px; }
+.assist-title svg { width: 36px; height: 36px; color: var(--brand); flex: none; }
+.assist-title strong { display: block; font-size: 18px; }
+.assist-title span { display: block; font-size: 13px; color: var(--ink-2); }
+.assist-settings { display: flex; gap: 24px; flex-wrap: wrap; padding: 12px 20px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.assist-settings .segmented { background: var(--surface); }
+.assist-settings .segmented button[aria-checked="true"] { background: var(--brand); color: #fff; box-shadow: none; }
+.chat { height: clamp(320px, calc(100vh - 400px), 640px); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.msg { display: flex; flex-direction: column; gap: 6px; max-width: 82%; animation: pop .3s both; }
+.msg.user { align-self: flex-end; align-items: flex-end; }
+.msg.bot { align-self: flex-start; align-items: flex-start; }
+.msg .bubble { padding: 11px 15px; border-radius: 16px; font-size: 15px; white-space: pre-wrap; }
+.msg.user .bubble { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+.msg.bot .bubble { background: #f3f6fb; border-bottom-left-radius: 4px; }
+.msg.bot .bubble.unsafe { background: var(--bad-bg); border: 1px solid #f3c4c4; }
+.msg .bubble mark { background: #ffd2d2; color: var(--bad-ink); font-weight: 700; padding: 0 2px; border-radius: 3px; }
+.msg .bubble.thinking { display: flex; align-items: center; gap: 10px; color: var(--ink-2); }
+.msg .bubble.error-bubble { background: var(--warn-bg); color: var(--warn-ink); }
+.msg .meta { font-size: 12px; color: var(--muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.spinner.small { width: 16px; height: 16px; border-width: 2px; margin: 0; flex: none; }
+.chat-suggest { flex-direction: column; align-items: flex-start; }
+.chat-suggest button { font-size: 14px; padding: 8px 14px; background: var(--surface); color: var(--brand); border-color: #c9d6ee; text-align: left; }
+.chat-note { font-size: 13.5px; font-weight: 650; padding: 7px 12px; border-radius: 10px; }
+.chat-note.good { background: var(--good-bg); color: var(--good-ink); }
+.chat-note.bad { background: var(--bad); color: #fff; }
+.chat-note.warn { background: var(--warn-bg); color: var(--warn-ink); }
+.chat-detail { font-size: 13px; color: var(--ink-2); align-self: stretch; }
+.chat-detail summary { cursor: pointer; font-weight: 600; }
+.chat-detail .pieces { padding: 8px 0 0; }
+.chat-form { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--line); }
+.chat-form input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line); }
+
 /* ---------- industry ---------- */
 .industry-picker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .ind-card { border: 2px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 16px; text-align: left; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); color: inherit; }
@@ -322,6 +358,8 @@ details.answer-detail div { white-space: pre-wrap; font-size: 12.5px; margin-top
     .hbar-row { grid-template-columns: 96px 1fr 56px; }
     .class-grid { grid-template-columns: 1fr; }
     .own-question form { flex-direction: column; }
+    .msg { max-width: 94%; }
+    .assist-settings { gap: 12px; }
     .strip, .benefits { grid-template-columns: 1fr; }
     .ind-card { padding: 12px; }
     .ind-card .ico { font-size: 26px; }
