@@ -1,7 +1,10 @@
 import json
+import os
 from pathlib import Path
 
-import tiktoken
+# Use the bundled GPT-2 tokenizer files so the app starts without an internet connection.
+os.environ.setdefault("TIKTOKEN_CACHE_DIR", str(Path(__file__).resolve().parent / "tiktoken_cache"))
+import tiktoken  # noqa: E402
 import torch
 import torch.nn as nn
 

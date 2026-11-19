@@ -9,15 +9,22 @@ answer model. Only the security stage between retrieval and generation differs:
 """
 
 import json
+import os
 import re
 import time
 from pathlib import Path
 
-import chromadb
-import requests
-from sentence_transformers import SentenceTransformer
+# The search model is downloaded once; after that, load it from disk without contacting the internet.
+_cached_model = (Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface"))
+                 / "hub" / "models--sentence-transformers--all-MiniLM-L6-v2")
+if _cached_model.exists():
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
-from neural_model import load_model, predict
+import chromadb  # noqa: E402
+import requests  # noqa: E402
+from sentence_transformers import SentenceTransformer  # noqa: E402
+
+from neural_model import load_model, predict  # noqa: E402
 
 folder = Path(__file__).parent
 documents_folder = folder.parent / "Project_Code" / "documents"

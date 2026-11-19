@@ -41,7 +41,8 @@ neural_model.py Exported PyTorch architecture
 model/          Trained weights and settings
 data/           Saved suite results, training history/config, held-out test set
 templates/      index.html
-static/         style.css, charts.js (dependency-free SVG charts), app.js
+static/         style.css, charts.js (dependency-free SVG charts), deck.js (swipeable slides), app.js
+tiktoken_cache/ Bundled GPT-2 tokenizer files, so the app starts without an internet connection
 ```
 
 ## Re-running the evaluation

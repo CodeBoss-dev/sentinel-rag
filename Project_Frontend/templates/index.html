@@ -6,6 +6,7 @@
     <title>Sentinel-RAG</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='charts.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='deck.js') }}" defer></script>
     <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
@@ -47,71 +48,90 @@
         </div>
     </div>
 
-    <!-- Headline numbers -->
-    <div class="section-head">
-        <h2>The results</h2>
-        <div class="segmented" id="scenario-switch" role="radiogroup" aria-label="Test situation">
-            <button role="radio" aria-checked="true" data-scenario="attack">Under heavy attack</button>
-            <button role="radio" aria-checked="false" data-scenario="everyday">Everyday company</button>
-        </div>
-    </div>
-    <p class="section-note" id="scenario-note"></p>
-    <div class="kpis" id="kpis"></div>
-
-    <div class="chart-grid">
-        <div class="card chart-card">
-            <h3>Answers that were tricked or leaked secrets</h3>
-            <p class="chart-sub">Lower is better</p>
-            <div id="chart-unsafe"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>Trick messages that reached the AI</h3>
-            <p class="chart-sub">Lower is better</p>
-            <div id="chart-poison"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>Answers that were complete and correct</h3>
-            <p class="chart-sub">Higher is better</p>
-            <div id="chart-helpful"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>Good information blocked by mistake</h3>
-            <p class="chart-sub">Lower is better</p>
-            <div id="chart-falseblock"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>Secret file pieces handed to the AI for someone not allowed to see them</h3>
-            <p class="chart-sub">Lower is better</p>
-            <div id="chart-secret"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>Seconds to answer</h3>
-            <p class="chart-sub">Typical (median) time per question. Lower is faster</p>
-            <div id="chart-speed"></div>
-        </div>
-    </div>
-
-    <!-- Every question at a glance -->
-    <div class="card">
-        <div class="story-head">
-            <h2>Every test question at a glance</h2>
-            <div class="legend-row compact">
-                <span><i class="status-chip safe">✓</i>Safe</span>
-                <span><i class="status-chip unsafe">✕</i>Tricked or leaked</span>
+    <!-- Results: one idea per slide -->
+    <div class="deck" id="overview-deck">
+        <div class="deck-head">
+            <div>
+                <h2>The results</h2>
+                <p class="section-note" id="scenario-note"></p>
+            </div>
+            <div class="segmented" id="scenario-switch" role="radiogroup" aria-label="Test situation">
+                <button role="radio" aria-checked="true" data-scenario="attack">Under heavy attack</button>
+                <button role="radio" aria-checked="false" data-scenario="everyday">Everyday company</button>
             </div>
         </div>
-        <p class="chart-sub">Each row is one question. Click a row to see all three answers side by side.</p>
-        <div id="question-grid" class="qgrid"></div>
-    </div>
-
-    <div class="card how">
-        <h2>The three assistants we compare</h2>
-        <div class="how-grid">
-            <div class="how-item"><div class="sys-badge s1">1</div><h3>No guard</h3><p>Reads everything it finds and trusts all of it. This is how most assistants work today.</p></div>
-            <div class="how-item"><div class="sys-badge s2">2</div><h3>Neural guard</h3><p>Our own small AI, built and trained from scratch, checks every piece in a few milliseconds.</p></div>
-            <div class="how-item"><div class="sys-badge s3">3</div><h3>AI judge</h3><p>A second, local AI reads every piece and gives a written verdict before anything is used.</p></div>
+        <nav class="deck-nav" aria-label="Result slides"></nav>
+        <div class="deck-track">
+            <section class="slide" data-title="Headline">
+                <div class="kpis" id="kpis"></div>
+            </section>
+            <section class="slide" data-title="Safety">
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>Answers that were tricked or leaked secrets</h3>
+                        <p class="chart-sub">Lower is better</p>
+                        <div id="chart-unsafe"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Trick messages that reached the AI</h3>
+                        <p class="chart-sub">Lower is better</p>
+                        <div id="chart-poison"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="Usefulness">
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>Answers that were complete and correct</h3>
+                        <p class="chart-sub">Higher is better</p>
+                        <div id="chart-helpful"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Good information blocked by mistake</h3>
+                        <p class="chart-sub">Lower is better</p>
+                        <div id="chart-falseblock"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="Secrets &amp; speed">
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>Secret file pieces handed to the AI for someone not allowed to see them</h3>
+                        <p class="chart-sub">Lower is better</p>
+                        <div id="chart-secret"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Seconds to answer</h3>
+                        <p class="chart-sub">Typical (median) time per question. Lower is faster</p>
+                        <div id="chart-speed"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="Every question">
+                <div class="card">
+                    <div class="story-head">
+                        <h3>Every test question at a glance</h3>
+                        <div class="legend-row compact">
+                            <span><i class="status-chip safe">✓</i>Safe</span>
+                            <span><i class="status-chip unsafe">✕</i>Tricked or leaked</span>
+                        </div>
+                    </div>
+                    <p class="chart-sub">Each row is one question. Click a row to see all three answers side by side.</p>
+                    <div id="question-grid" class="qgrid scroll"></div>
+                </div>
+            </section>
+            <section class="slide" data-title="The three assistants">
+                <div class="card how">
+                    <h3>The three assistants we compare</h3>
+                    <div class="how-grid">
+                        <div class="how-item"><div class="sys-badge s1">1</div><h3>No guard</h3><p>Reads everything it finds and trusts all of it. This is how most assistants work today.</p></div>
+                        <div class="how-item"><div class="sys-badge s2">2</div><h3>Neural guard</h3><p>Our own small AI, built and trained from scratch, checks every piece in a few milliseconds.</p></div>
+                        <div class="how-item"><div class="sys-badge s3">3</div><h3>AI judge</h3><p>A second, local AI reads every piece and gives a written verdict before anything is used.</p></div>
+                    </div>
+                    <p class="chart-sub">All three use the same files, the same search and the same answer-writing AI. Only the guard is different, so any difference in the results comes from the guard.</p>
+                </div>
+            </section>
         </div>
-        <p class="chart-sub">All three use the same files, the same search and the same answer-writing AI. Only the guard is different, so any difference in the results comes from the guard.</p>
     </div>
 </section>
 
@@ -208,36 +228,46 @@
         <div class="strip" id="industry-strip"></div>
     </div>
 
-    <div class="card">
-        <h2 id="benefits-title">What you get</h2>
-        <div class="benefits" id="industry-benefits"></div>
-    </div>
-
-    <div class="chart-grid">
-        <div class="card chart-card">
-            <h3>What a data leak costs a company in India</h3>
-            <p class="chart-sub">Average cost of one data breach in 2026, in crore rupees</p>
-            <div id="stake-chart"></div>
-            <p class="source">Source: IBM Cost of a Data Breach Report 2026 (India findings)</p>
+    <div class="deck" id="industry-deck">
+        <nav class="deck-nav" aria-label="Business slides"></nav>
+        <div class="deck-track">
+            <section class="slide" data-title="What you get">
+                <div class="card">
+                    <h3 id="benefits-title">What you get</h3>
+                    <div class="benefits" id="industry-benefits"></div>
+                </div>
+            </section>
+            <section class="slide" data-title="What a leak costs">
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>What a data leak costs a company in India</h3>
+                        <p class="chart-sub">Average cost of one data breach in 2026, in crore rupees</p>
+                        <div id="stake-chart"></div>
+                        <p class="source">Source: IBM Cost of a Data Breach Report 2026 (India findings)</p>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Why it matters now</h3>
+                        <div class="stake-facts" id="stake-facts"></div>
+                        <p class="source">Source: IBM Cost of a Data Breach Report 2026</p>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="How it fits in">
+                <div class="card">
+                    <h3>How it fits into your company</h3>
+                    <svg id="fit-svg" viewBox="0 0 1000 200" role="img" aria-label="Your files flow through the Sentinel guard before your AI assistant uses them to answer your staff."></svg>
+                    <p class="chart-sub" style="text-align:center">No need to replace your AI or move your files. The guard sits in between and checks everything first.</p>
+                </div>
+            </section>
+            <section class="slide" data-title="All 8 tests">
+                <div class="card">
+                    <h3>Tested across four industries</h3>
+                    <p class="chart-sub">Each row is one real test. ✕ means the AI repeated the hidden trick to the employee.</p>
+                    <div id="industry-grid" class="qgrid"></div>
+                    <div class="industry-totals" id="industry-totals"></div>
+                </div>
+            </section>
         </div>
-        <div class="card chart-card">
-            <h3>Why it matters now</h3>
-            <div class="stake-facts" id="stake-facts"></div>
-            <p class="source">Source: IBM Cost of a Data Breach Report 2026</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>How it fits into your company</h2>
-        <svg id="fit-svg" viewBox="0 0 1000 200" role="img" aria-label="Your files flow through the Sentinel guard before your AI assistant uses them to answer your staff."></svg>
-        <p class="chart-sub" style="text-align:center">No need to replace your AI or move your files. The guard sits in between and checks everything first.</p>
-    </div>
-
-    <div class="card">
-        <h2>Tested across four industries</h2>
-        <p class="chart-sub">Each row is one real test. ✕ means the AI repeated the hidden trick to the employee.</p>
-        <div id="industry-grid" class="qgrid"></div>
-        <div class="industry-totals" id="industry-totals"></div>
     </div>
 </section>
 
@@ -246,8 +276,6 @@
     <div class="hero">
         <h1>Inside our neural guard<br><span>A small AI brain we built and trained from scratch</span></h1>
     </div>
-    <div class="kpis" id="brain-kpis"></div>
-
     <div class="card">
         <div class="story-head">
             <h2>Type a message and watch the brain think</h2>
@@ -264,35 +292,45 @@
         <div class="verdict-banner" id="brain-verdict" hidden></div>
     </div>
 
-    <div class="chart-grid">
-        <div class="card chart-card">
-            <h3>Words the brain paid most attention to</h3>
-            <p class="chart-sub">Darker = looked at more closely</p>
-            <div id="attention-words" class="attention-words"></div>
+    <div class="deck" id="brain-deck">
+        <nav class="deck-nav" aria-label="Brain slides"></nav>
+        <div class="deck-track">
+            <section class="slide" data-title="This message">
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>Words the brain paid most attention to</h3>
+                        <p class="chart-sub">Darker = looked at more closely</p>
+                        <div id="attention-words" class="attention-words"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>How the decision builds up, layer by layer</h3>
+                        <p class="chart-sub">What the brain would say if it stopped after each layer</p>
+                        <div id="layer-chart"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="How good it is">
+                <div class="kpis" id="brain-kpis"></div>
+                <div class="chart-grid">
+                    <div class="card chart-card">
+                        <h3>Report card: how often it is right</h3>
+                        <p class="chart-sub">Tested on 500 messages it never saw while learning</p>
+                        <div id="report-card"></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>How it learned</h3>
+                        <p class="chart-sub">Score on unseen messages after each practice round</p>
+                        <div id="learning-chart"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="slide" data-title="What it recognises">
+                <div class="card">
+                    <h3>The five things it can recognise</h3>
+                    <div class="class-grid" id="class-grid"></div>
+                </div>
+            </section>
         </div>
-        <div class="card chart-card">
-            <h3>How the decision builds up, layer by layer</h3>
-            <p class="chart-sub">What the brain would say if it stopped after each layer</p>
-            <div id="layer-chart"></div>
-        </div>
-    </div>
-
-    <div class="chart-grid">
-        <div class="card chart-card">
-            <h3>Report card: how often it is right</h3>
-            <p class="chart-sub">Tested on 500 messages it never saw while learning</p>
-            <div id="report-card"></div>
-        </div>
-        <div class="card chart-card">
-            <h3>How it learned</h3>
-            <p class="chart-sub">Score on unseen messages after each practice round</p>
-            <div id="learning-chart"></div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>The five things it can recognise</h2>
-        <div class="class-grid" id="class-grid"></div>
     </div>
 </section>
 
