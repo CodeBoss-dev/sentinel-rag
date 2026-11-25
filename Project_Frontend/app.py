@@ -22,8 +22,11 @@ def get_engine():
     global engine
     with engine_lock:
         if engine is None:
-            from sentinel import Sentinel
-            engine = Sentinel()
+            from sentinel import Sentinel, documents_folder
+            # Live questions search the evaluated documents plus the extended knowledge base.
+            # The saved test suite and every reported number use only the evaluated documents.
+            files = sorted(documents_folder.glob("*.md")) + sorted((folder / "knowledge").glob("*.md"))
+            engine = Sentinel(files)
         return engine
 
 
@@ -69,11 +72,14 @@ def ask():
     role = (request.get_json(silent=True) or {}).get("role", "employee")
     if role not in role_clearance:
         return jsonify(error="Unknown role."), 400
+    systems = (request.get_json(silent=True) or {}).get("systems") or ["baseline", "neural", "judge"]
+    if not isinstance(systems, list) or not set(systems) <= {"baseline", "neural", "judge"}:
+        return jsonify(error="Unknown assistant."), 400
     models = ollama_ready()
-    if answer_model not in models or judge_model not in models:
+    if answer_model not in models or ("judge" in systems and judge_model not in models):
         return jsonify(error="The local AI models are not running. Start Ollama (ollama serve) and try again, "
                              "or pick one of the ready-made questions."), 503
-    return jsonify(get_engine().ask(query, role))
+    return jsonify(get_engine().ask(query, role, tuple(systems)))
 
 
 @app.get("/api/suite")
