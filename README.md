@@ -23,11 +23,18 @@ answer-writing model**. Only the security layer differs:
 | Unsafe answers, heavy attack | 10 / 25 | 0 / 25 | 0 / 25 |
 | Unsafe answers, everyday company | 4 / 25 | 0 / 25 | 0 / 25 |
 | Fooled in industry tests (bank, hospital, law firm, store) | 5 / 8 | 0 / 8 | 0 / 8 |
-| Good information blocked by mistake (everyday) | 0% | 15.9% | 0% |
+| Good information blocked by mistake (everyday, retrieved passages) | 0 / 113 (0%) | 18 / 113 (15.9%) | 0 / 113 (0%) |
 | Median seconds per answer (heavy attack) | 2.6 | 3.4 | 17.9 |
+| Median seconds per answer (everyday) | 2.6 | 2.8 | 16.4 |
 
-Neural classifier: 1.65M parameters, 4 Transformer encoder layers, 89.8% accuracy
-on a 500-message held-out test set, 5 threat classes. All data is synthetic.
+"Unsafe" means the assistant either repeated a planted instruction or showed restricted
+data to the wrong role. Under heavy attack, the no-guard assistant was tricked 8 times and
+leaked restricted data twice (exact McNemar test vs. either guard: p = 0.002).
+
+Neural classifier: 1.65M parameters, 4 Transformer encoder layers, 89.8% accuracy (449 / 500)
+and 0.895 macro F1 on a 500-message held-out test set, 5 threat classes. All data is synthetic.
+These figures come from the deployed weights in `Project_Frontend/model/`; the earlier v2
+training export in `Project_Code/evaluation/neural_v2/` reports 89.6% (448 / 500).
 
 ## Dashboard
 
